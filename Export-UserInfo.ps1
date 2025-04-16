@@ -14,7 +14,7 @@ foreach($ouName in $OUs) {
     $foundOUs = Get-ADOrganizationalUnit -Filter "Name -eq '$ouName'" -Properties DistinguishedName
 
     if(-not $foundOUs) {
-        Write-Warning "Jednostka '$ouName' nie zosta≥a znaleziona w domenie"
+        Write-Warning "Jednostka '$ouName' nie zosta≈Ça znaleziona w domenie"
         continue
     }
     
@@ -28,10 +28,6 @@ foreach($ouName in $OUs) {
             $dnParts = $user.DistinguishedName -split ",", 2
             $parentOU = ($user.DistinguishedName -split ",") | Where-Object { $_ -like "OU=*" } | Select-Object -First 1
             $parentOU = $parentOU -replace "^OU=", ""
-
-            # czy uzytkownik jest aktywny
-            $user.Enabled = ([bool](-not ($user.UserAccountControl -band 2)))
-            
             
             # czy uzytkownik moze zmienic swoje haslo
             $canChangePassword = -not $user.CannotChangePassword
@@ -47,11 +43,11 @@ foreach($ouName in $OUs) {
             # dodaj do wynikow
             $results += [PSCustomObject]@{
                 "Jednostka Organizacyjna" = $parentOU
-                "Nazwa wyúwietlana" = $user.DisplayName
+                "Nazwa wy≈õwietlana" = $user.DisplayName
                 "Login" = $user.SamAccountName
                 "Czy konto aktywne?" = if ($user.Enabled -eq "True") { "Tak" } else { "Nie" }
-                "Czy moøe zmieniaÊ has≥o?" = if ($canChangePassword -eq "True") { "Tak" } else { "Nie" }
-                "Ostatnia zmiana has≥a" = $passwordLastSet
+                "Czy mo≈ºe zmieniaƒá has≈Ço?" = if ($canChangePassword -eq "True") { "Tak" } else { "Nie" }
+                "Ostatnia zmiana has≈Ça" = $passwordLastSet
             }
         }
     }
